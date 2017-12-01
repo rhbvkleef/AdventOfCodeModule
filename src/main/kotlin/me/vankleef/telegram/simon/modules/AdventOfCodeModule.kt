@@ -9,9 +9,6 @@ import org.telegram.telegrambots.api.objects.Update
 
 class AdventOfCodeModule : Module {
 
-    var session = "53616c7465645f5f6e3be38ddbc21fdde38bc55c2fbb5c80c74121dcf9ffb73963ed203ccee9f99207288553c83273d7"
-    var url = "http://adventofcode.com/2017/leaderboard/private/view/211171.json"
-
     override val name: String
         get() {
             return "AdventOfCodeModule"
@@ -39,19 +36,32 @@ class AdventOfCodeModule : Module {
      * @param update The update containing information about what happened
      */
     override fun processUpdate(sender: Bot, update: Update) {
-        val message = Utils.checkForCommand(update, "/aoc", true)
+
+        var message = Utils.checkForCommand(update, "/aocsession", true)
+        if (message != null) {
+            AdventOfCodeAPIClient.session = message.text.split(" ")[1]
+            Utils.reply(sender, message, "Session set!")
+            return
+        }
+        message = Utils.checkForCommand(update, "/aoc", true)
 
         if (message != null) {
             val msg = SendMessage()
-            msg.text = "AdventOfCode scoreboard\n```\n" +
-                    "Name                 | Score | Stars\n" +
-                    "---------------------+-------+-------\n" +
-                    AdventOfCodeAPIClient.get().reversed().joinToString("\n") +
-                    "```"
+            try {
+                msg.text = "AdventOfCode scoreboard\n```\n" +
+                        "Name           | Score | Stars\n" +
+                        "---------------+-------+-------\n" +
+                        AdventOfCodeAPIClient.get().reversed().joinToString("\n") +
+                        "```"
+                msg.setParseMode(ParseMode.MARKDOWN)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                msg.text = e.message
+            }
             msg.chatId = message.chatId.toString()
-            msg.setParseMode(ParseMode.MARKDOWN)
             sender.execute(msg)
         }
+
     }
 
     /**
@@ -61,7 +71,7 @@ class AdventOfCodeModule : Module {
      * @return Object that contains the state of this module
      */
     override fun saveState(): Any? {
-        return "new state"
+        return null
     }
 
     override fun getHelpText(args: Array<String>?): String? {

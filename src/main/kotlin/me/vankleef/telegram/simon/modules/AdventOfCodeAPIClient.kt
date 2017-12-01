@@ -12,10 +12,12 @@ import java.util.*
  */
 object AdventOfCodeAPIClient {
 
+    var session = "53616c7465645f5f6e3be38ddbc21fdde38bc55c2fbb5c80c74121dcf9ffb73963ed203ccee9f99207288553c83273d7"
+
     class Person(private var name: String, var score: Int, private var stars: Int) {
 
         override fun toString(): String {
-            return String.format("%-20s | %5d | %3d", this.name, this.score, this.stars)
+            return String.format("%-14s | %5d | %3d", this.name, this.score, this.stars)
         }
     }
 
@@ -25,7 +27,7 @@ object AdventOfCodeAPIClient {
 
         val con = url.openConnection()
         con.doOutput = true
-        con.setRequestProperty("Cookie", "session=53616c7465645f5f6e3be38ddbc21fdde38bc55c2fbb5c80c74121dcf9ffb73963ed203ccee9f99207288553c83273d7")
+        con.setRequestProperty("Cookie", "session=$session")
         con.connect()
 
         val parser = JsonParser()
