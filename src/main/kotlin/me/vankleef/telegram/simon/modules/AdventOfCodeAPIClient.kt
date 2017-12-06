@@ -17,7 +17,7 @@ object AdventOfCodeAPIClient {
     class Person(private var name: String, var score: Int, private var stars: Int) {
 
         override fun toString(): String {
-            return String.format("%-14s | %5d | %3d", this.name, this.score, this.stars)
+            return String.format("%-14s | %5d | %3d", this.name.substring(0, Math.min(this.name.length, 8)), this.score, this.stars)
         }
     }
 
