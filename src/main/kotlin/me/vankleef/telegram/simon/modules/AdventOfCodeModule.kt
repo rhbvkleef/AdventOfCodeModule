@@ -49,8 +49,8 @@ class AdventOfCodeModule : Module {
             val msg = SendMessage()
             try {
                 msg.text = "AdventOfCode scoreboard\n```\n" +
-                        "Name           | Score | Stars\n" +
-                        "---------------+-------+-------\n" +
+                        "Name           |  \uD83D\uDCB0 | ⭐️\n" +
+                        "---------------+-----+-----\n" +
                         AdventOfCodeAPIClient.get().reversed().joinToString("\n") +
                         "```"
                 msg.setParseMode(ParseMode.MARKDOWN)
