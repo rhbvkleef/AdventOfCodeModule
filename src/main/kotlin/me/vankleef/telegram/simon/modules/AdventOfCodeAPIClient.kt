@@ -17,7 +17,7 @@ object AdventOfCodeAPIClient {
     class Person(private var name: String, var score: Int, private var stars: Int) {
 
         override fun toString(): String {
-            return String.format("%-14s | %3d | %2d", this.name.substring(0, Math.min(this.name.length, 8)), this.score, this.stars)
+            return String.format("%-14s | %3d | %2d", this.name.substring(0, Math.min(this.name.length, 14)), this.score, this.stars)
         }
     }
 
@@ -36,16 +36,22 @@ object AdventOfCodeAPIClient {
 
         val participants = obj.asJsonObject.get("members").asJsonObject.entrySet()
 
-        val persons: ArrayList<Person> = ArrayList<Person>(participants.size)
+        val persons: ArrayList<Person> = ArrayList(participants.size)
         for (participant in participants) {
             val pcp = participant.value.asJsonObject
             val name = pcp.get("name").asString
             val stars = pcp.get("stars").asInt
             val score = pcp.get("local_score").asInt
 
-            persons.add(Person(name, score, stars))
+            persons.add(Person(userNameMatrix.getOrDefault(name, name), score, stars))
         }
 
         return persons.sortedBy { it.score }
     }
+
+    private val userNameMatrix = mapOf(
+            "sniperrifle2004" to "Wilfried",
+            "nanderv" to "Nander",
+            "swordiemen" to "Tim Block"
+    )
 }
